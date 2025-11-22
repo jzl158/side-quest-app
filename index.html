@@ -18,9 +18,36 @@
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
     }
 
+    /* Navigation */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(13, 14, 46, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0, 64, 193, 0.2);
+      padding: 16px 40px;
+      z-index: 100;
+      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .navbar-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    .navbar-logo {
+      height: 40px;
+      width: auto;
+    }
+
     /* Hero Section */
     .hero-section {
-      padding: 80px 20px 60px;
+      padding: 140px 20px 60px;
       text-align: center;
     }
 
@@ -275,6 +302,13 @@
   </style>
 </head>
 <body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="navbar-content">
+      <img src="Soonpay.png" alt="Soonpay" class="navbar-logo">
+    </div>
+  </nav>
+
   <div class="side-quest-page">
     <!-- Hero Section -->
     <div class="hero-section">
