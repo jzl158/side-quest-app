@@ -27,26 +27,38 @@ export default async (req, res) => {
     let imageUrl = '';
     if (imageData) {
       const imgbbApiKey = process.env.IMGBB_API_KEY;
+      console.log('ImgBB API Key exists:', !!imgbbApiKey);
 
       if (imgbbApiKey) {
         const formData = new URLSearchParams();
         formData.append('image', imageData.split(',')[1]); // Remove data:image/...;base64, prefix
 
+        console.log('Uploading to ImgBB...');
         const imgbbResponse = await fetch(`https://api.imgbb.com/1/upload?key=${imgbbApiKey}`, {
           method: 'POST',
           body: formData
         });
 
+        console.log('ImgBB response status:', imgbbResponse.status);
+
         if (imgbbResponse.ok) {
           const imgbbData = await imgbbResponse.json();
           imageUrl = imgbbData.data.url;
+          console.log('Image uploaded successfully to:', imageUrl);
+        } else {
+          const errorData = await imgbbResponse.json();
+          console.error('ImgBB upload failed:', errorData);
         }
+      } else {
+        console.log('No ImgBB API key configured');
       }
     }
 
     // Send to Notion
     const notionToken = process.env.NOTION_TOKEN;
     const notionDatabaseId = process.env.NOTION_DATABASE_ID;
+
+    console.log('Sending to Notion with image URL:', imageUrl || 'No image URL');
 
     const notionResponse = await fetch('https://api.notion.com/v1/pages', {
       method: 'POST',
