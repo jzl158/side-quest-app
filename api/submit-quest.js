@@ -92,6 +92,11 @@ export default async (req, res) => {
             ]
           } : {
             files: []
+          },
+          'ImageLink': imageUrl ? {
+            url: imageUrl
+          } : {
+            url: null
           }
         }
       })
