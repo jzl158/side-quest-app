@@ -522,6 +522,7 @@
               accept="image/*"
               required
             >
+            <small style="color: #a0a4b8; font-size: 0.875rem; margin-top: 4px; display: block;">Maximum file size: 3MB</small>
           </div>
 
           <button type="submit" class="modal-button" id="submitButton">Start Exploring</button>
@@ -580,12 +581,20 @@
       const submitButton = document.getElementById('submitButton');
 
       if (email && fileInput.files.length > 0) {
+        const file = fileInput.files[0];
+
+        // Check file size (3MB = 3 * 1024 * 1024 bytes)
+        const maxSize = 3 * 1024 * 1024;
+        if (file.size > maxSize) {
+          alert('File size must be less than 3MB. Please choose a smaller image or compress it.');
+          return;
+        }
+
         // Disable submit button and show loading state
         submitButton.disabled = true;
         submitButton.textContent = 'Submitting...';
 
         try {
-          const file = fileInput.files[0];
 
           // Convert image to base64
           const reader = new FileReader();
