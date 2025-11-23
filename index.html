@@ -1012,10 +1012,12 @@
 
       const email = document.getElementById('userEmail').value;
       const fileInput = document.getElementById('appProof');
+      const termsCheckbox = document.getElementById('termsCheckbox');
       const submitButton = document.getElementById('submitButton');
 
       if (email && fileInput.files.length > 0) {
         const file = fileInput.files[0];
+        const consentGiven = termsCheckbox.checked;
 
         // Check file size (3MB = 3 * 1024 * 1024 bytes)
         const maxSize = 3 * 1024 * 1024;
@@ -1047,7 +1049,8 @@
                 body: JSON.stringify({
                   email: email,
                   imageData: imageData,
-                  fileName: file.name
+                  fileName: file.name,
+                  consent: consentGiven
                 })
               });
 

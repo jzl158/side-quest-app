@@ -17,10 +17,14 @@ export default async (req, res) => {
   }
 
   try {
-    const { email, imageData, fileName } = req.body;
+    const { email, imageData, fileName, consent } = req.body;
 
     if (!email) {
       return res.status(400).json({ error: 'Email is required' });
+    }
+
+    if (!consent) {
+      return res.status(400).json({ error: 'Consent is required' });
     }
 
     // First, upload image to imgbb if provided
@@ -97,6 +101,9 @@ export default async (req, res) => {
             url: imageUrl
           } : {
             url: null
+          },
+          'Consent': {
+            checkbox: consent
           }
         }
       })
