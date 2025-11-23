@@ -619,11 +619,17 @@
 
               const data = await response.json();
 
+              console.log('Response status:', response.status);
+              console.log('Response ok:', response.ok);
+              console.log('Response data:', data);
+
               if (response.ok) {
                 console.log('Successfully saved to Notion!');
+                console.log('Hiding modal...');
                 // Hide the modal
                 document.getElementById('welcomeModal').classList.add('hidden');
                 document.body.style.overflow = 'auto';
+                console.log('Modal hidden, overflow set to auto');
               } else {
                 console.error('API Error:', data);
                 alert('Error submitting form: ' + (data.error || 'Unknown error'));
