@@ -651,18 +651,6 @@
             >
           </div>
 
-          <div class="modal-form-group">
-            <label class="modal-form-label" for="appProof">Picture Proof of App Installation *</label>
-            <input
-              type="file"
-              id="appProof"
-              class="modal-form-input"
-              accept="image/*"
-              required
-            >
-            <small style="color: #a0a4b8; font-size: 0.875rem; margin-top: 4px; display: block;">Maximum file size: 3MB</small>
-          </div>
-
           <div class="modal-checkbox-group">
             <input
               type="checkbox"
@@ -1011,84 +999,49 @@
       event.preventDefault();
 
       const email = document.getElementById('userEmail').value;
-      const fileInput = document.getElementById('appProof');
       const termsCheckbox = document.getElementById('termsCheckbox');
       const submitButton = document.getElementById('submitButton');
 
-      if (email && fileInput.files.length > 0) {
-        const file = fileInput.files[0];
+      if (email) {
         const consentGiven = termsCheckbox.checked;
-
-        // Check file size (3MB = 3 * 1024 * 1024 bytes)
-        const maxSize = 3 * 1024 * 1024;
-        if (file.size > maxSize) {
-          alert('File size must be less than 3MB. Please choose a smaller image or compress it.');
-          return;
-        }
 
         // Disable submit button and show loading state
         submitButton.disabled = true;
         submitButton.textContent = 'Submitting...';
 
         try {
+          // Send to serverless function
+          const response = await fetch('/api/submit-quest', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              email: email,
+              consent: consentGiven
+            })
+          });
 
-          // Convert image to base64
-          const reader = new FileReader();
-          reader.readAsDataURL(file);
+          const data = await response.json();
 
-          reader.onload = async function() {
-            try {
-              const imageData = reader.result;
+          console.log('Response status:', response.status);
+          console.log('Response ok:', response.ok);
+          console.log('Response data:', data);
 
-              // Send to serverless function
-              const response = await fetch('/api/submit-quest', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                  email: email,
-                  imageData: imageData,
-                  fileName: file.name,
-                  consent: consentGiven
-                })
-              });
-
-              const data = await response.json();
-
-              console.log('Response status:', response.status);
-              console.log('Response ok:', response.ok);
-              console.log('Response data:', data);
-
-              if (response.ok) {
-                console.log('Successfully saved to Notion!');
-                console.log('Hiding modal...');
-                // Hide the modal
-                const modal = document.getElementById('welcomeModal');
-                modal.style.display = 'none';
-                document.body.style.overflow = 'auto';
-                console.log('Modal hidden, overflow set to auto');
-              } else {
-                console.error('API Error:', data);
-                alert('Error submitting form: ' + (data.error || 'Unknown error'));
-                submitButton.disabled = false;
-                submitButton.textContent = 'Start Exploring';
-              }
-            } catch (error) {
-              console.error('Error:', error);
-              alert('Error submitting form. Please try again.');
-              submitButton.disabled = false;
-              submitButton.textContent = 'Start Exploring';
-            }
-          };
-
-          reader.onerror = function() {
-            console.error('Error reading file');
-            alert('Error reading file. Please try again.');
+          if (response.ok) {
+            console.log('Successfully saved to Notion!');
+            console.log('Hiding modal...');
+            // Hide the modal
+            const modal = document.getElementById('welcomeModal');
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+            console.log('Modal hidden, overflow set to auto');
+          } else {
+            console.error('API Error:', data);
+            alert('Error submitting form: ' + (data.error || 'Unknown error'));
             submitButton.disabled = false;
             submitButton.textContent = 'Start Exploring';
-          };
-
+          }
         } catch (error) {
           console.error('Error:', error);
           alert('Error submitting form. Please try again.');

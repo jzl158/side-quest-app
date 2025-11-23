@@ -85,23 +85,21 @@ export default async (req, res) => {
               }
             ]
           },
-          'File': imageUrl ? {
-            files: [
-              {
-                name: fileName || 'app-proof.png',
-                external: {
-                  url: imageUrl
+          ...(imageUrl && {
+            'File': {
+              files: [
+                {
+                  name: fileName || 'app-proof.png',
+                  external: {
+                    url: imageUrl
+                  }
                 }
-              }
-            ]
-          } : {
-            files: []
-          },
-          'ImageLink': imageUrl ? {
-            url: imageUrl
-          } : {
-            url: null
-          },
+              ]
+            },
+            'ImageLink': {
+              url: imageUrl
+            }
+          }),
           'Consent': {
             checkbox: consent
           }
