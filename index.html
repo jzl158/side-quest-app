@@ -572,21 +572,76 @@
       document.getElementById('formStep').classList.add('active');
     }
 
-    function submitWelcomeForm(event) {
+    async function submitWelcomeForm(event) {
       event.preventDefault();
 
       const email = document.getElementById('userEmail').value;
       const fileInput = document.getElementById('appProof');
+      const submitButton = document.getElementById('submitButton');
 
       if (email && fileInput.files.length > 0) {
-        // Here you would typically send the data to a server
-        // For now, we'll just close the modal and allow access
-        console.log('Email:', email);
-        console.log('File:', fileInput.files[0].name);
+        // Disable submit button and show loading state
+        submitButton.disabled = true;
+        submitButton.textContent = 'Submitting...';
 
-        // Hide the modal
-        document.getElementById('welcomeModal').classList.add('hidden');
-        document.body.style.overflow = 'auto';
+        try {
+          const file = fileInput.files[0];
+
+          // Convert image to base64
+          const reader = new FileReader();
+          reader.readAsDataURL(file);
+
+          reader.onload = async function() {
+            try {
+              const imageData = reader.result;
+
+              // Send to serverless function
+              const response = await fetch('/api/submit-quest', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                  email: email,
+                  imageData: imageData,
+                  fileName: file.name
+                })
+              });
+
+              const data = await response.json();
+
+              if (response.ok) {
+                console.log('Successfully saved to Notion!');
+                // Hide the modal
+                document.getElementById('welcomeModal').classList.add('hidden');
+                document.body.style.overflow = 'auto';
+              } else {
+                console.error('API Error:', data);
+                alert('Error submitting form: ' + (data.error || 'Unknown error'));
+                submitButton.disabled = false;
+                submitButton.textContent = 'Start Exploring';
+              }
+            } catch (error) {
+              console.error('Error:', error);
+              alert('Error submitting form. Please try again.');
+              submitButton.disabled = false;
+              submitButton.textContent = 'Start Exploring';
+            }
+          };
+
+          reader.onerror = function() {
+            console.error('Error reading file');
+            alert('Error reading file. Please try again.');
+            submitButton.disabled = false;
+            submitButton.textContent = 'Start Exploring';
+          };
+
+        } catch (error) {
+          console.error('Error:', error);
+          alert('Error submitting form. Please try again.');
+          submitButton.disabled = false;
+          submitButton.textContent = 'Start Exploring';
+        }
       }
     }
 
