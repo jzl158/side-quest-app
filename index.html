@@ -627,7 +627,8 @@
                 console.log('Successfully saved to Notion!');
                 console.log('Hiding modal...');
                 // Hide the modal
-                document.getElementById('welcomeModal').classList.add('hidden');
+                const modal = document.getElementById('welcomeModal');
+                modal.style.display = 'none';
                 document.body.style.overflow = 'auto';
                 console.log('Modal hidden, overflow set to auto');
               } else {
