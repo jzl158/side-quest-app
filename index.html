@@ -208,6 +208,144 @@
       color: #ffd700;
     }
 
+    /* Welcome Modal */
+    .welcome-modal {
+      display: flex;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.95);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .welcome-modal.hidden {
+      display: none;
+    }
+
+    .welcome-modal-content {
+      background: linear-gradient(135deg, rgba(13, 14, 46, 0.98) 0%, rgba(26, 16, 53, 0.98) 100%);
+      border: 2px solid rgba(0, 64, 193, 0.3);
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 600px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0, 64, 193, 0.3);
+      text-align: center;
+    }
+
+    .welcome-modal-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 20px;
+    }
+
+    .welcome-modal-text {
+      font-size: 1.125rem;
+      line-height: 1.6;
+      color: #a0a4b8;
+      margin-bottom: 30px;
+    }
+
+    .modal-button {
+      background: linear-gradient(135deg, rgba(0, 64, 193, 0.8) 0%, rgba(0, 100, 255, 0.8) 100%);
+      border: 2px solid rgba(0, 64, 193, 0.5);
+      color: #ffffff;
+      padding: 14px 32px;
+      font-size: 1.125rem;
+      font-weight: 600;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin: 8px;
+    }
+
+    .modal-button:hover {
+      background: linear-gradient(135deg, rgba(0, 64, 193, 1) 0%, rgba(0, 100, 255, 1) 100%);
+      border-color: rgba(0, 100, 255, 0.8);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 64, 193, 0.4);
+    }
+
+    .modal-button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .app-download-buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      margin-bottom: 30px;
+    }
+
+    .app-button {
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.8) 0%, rgba(255, 215, 0, 0.8) 100%);
+      border: 2px solid #d4af37;
+      color: #1a1035;
+      padding: 12px 24px;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .app-button:hover {
+      background: linear-gradient(135deg, rgba(212, 175, 55, 1) 0%, rgba(255, 215, 0, 1) 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(212, 175, 55, 0.5);
+    }
+
+    .modal-form-group {
+      margin-bottom: 24px;
+      text-align: left;
+    }
+
+    .modal-form-label {
+      display: block;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 8px;
+    }
+
+    .modal-form-input {
+      width: 100%;
+      padding: 12px 16px;
+      font-size: 1rem;
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      color: #ffffff;
+      transition: all 0.3s ease;
+    }
+
+    .modal-form-input:focus {
+      outline: none;
+      border-color: rgba(0, 64, 193, 0.5);
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .modal-form-input::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .modal-step {
+      display: none;
+    }
+
+    .modal-step.active {
+      display: block;
+    }
+
     /* Iframe Modal */
     .iframe-modal {
       display: none;
@@ -309,6 +447,59 @@
     </div>
   </nav>
 
+  <!-- Welcome Modal -->
+  <div class="welcome-modal" id="welcomeModal">
+    <div class="welcome-modal-content">
+      <!-- Step 1: Welcome Message -->
+      <div class="modal-step active" id="welcomeStep">
+        <h2 class="welcome-modal-title">Welcome to Soonpay Exploration Quests</h2>
+        <p class="welcome-modal-text">
+          Tap "Continue" to participate in the quests and learn about the value we bring to individuals, businesses, governments, and educational institutions conducting remittances.
+        </p>
+        <button class="modal-button" onclick="showFormStep()">Continue</button>
+      </div>
+
+      <!-- Step 2: Form -->
+      <div class="modal-step" id="formStep">
+        <h2 class="welcome-modal-title">Get Started</h2>
+        <p class="welcome-modal-text" style="margin-bottom: 20px;">Download the SoonPay app and complete the form below</p>
+
+        <!-- App Download Buttons -->
+        <div class="app-download-buttons">
+          <a href="#" class="app-button" target="_blank">📱 Download for iOS</a>
+          <a href="#" class="app-button" target="_blank">🤖 Download for Android</a>
+        </div>
+
+        <!-- Form -->
+        <form id="welcomeForm" onsubmit="submitWelcomeForm(event)">
+          <div class="modal-form-group">
+            <label class="modal-form-label" for="userEmail">Email Address *</label>
+            <input
+              type="email"
+              id="userEmail"
+              class="modal-form-input"
+              placeholder="Enter your email"
+              required
+            >
+          </div>
+
+          <div class="modal-form-group">
+            <label class="modal-form-label" for="appProof">Proof of App Installation *</label>
+            <input
+              type="file"
+              id="appProof"
+              class="modal-form-input"
+              accept="image/*"
+              required
+            >
+          </div>
+
+          <button type="submit" class="modal-button" id="submitButton">Start Exploring</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
   <div class="side-quest-page">
     <!-- Hero Section -->
     <div class="hero-section">
@@ -340,6 +531,36 @@
   </div>
 
   <script>
+    // Welcome Modal Functions
+    function showFormStep() {
+      document.getElementById('welcomeStep').classList.remove('active');
+      document.getElementById('formStep').classList.add('active');
+    }
+
+    function submitWelcomeForm(event) {
+      event.preventDefault();
+
+      const email = document.getElementById('userEmail').value;
+      const fileInput = document.getElementById('appProof');
+
+      if (email && fileInput.files.length > 0) {
+        // Here you would typically send the data to a server
+        // For now, we'll just close the modal and allow access
+        console.log('Email:', email);
+        console.log('File:', fileInput.files[0].name);
+
+        // Hide the modal
+        document.getElementById('welcomeModal').classList.add('hidden');
+        document.body.style.overflow = 'auto';
+      }
+    }
+
+    // Show modal on page load
+    window.addEventListener('load', function() {
+      document.getElementById('welcomeModal').style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    });
+
     // Data
     const topics = [
       {
