@@ -38,12 +38,32 @@
       margin: 0 auto;
       display: flex;
       align-items: center;
-      justify-content: flex-start;
+      justify-content: space-between;
     }
 
     .navbar-logo {
       height: 40px;
       width: auto;
+    }
+
+    .help-icon-button {
+      background: transparent;
+      border: 2px solid rgba(0, 64, 193, 0.5);
+      color: #ffffff;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .help-icon-button:hover {
+      background: rgba(0, 64, 193, 0.3);
+      border-color: rgba(0, 100, 255, 0.8);
+      transform: scale(1.05);
     }
 
     /* Hero Section */
@@ -605,6 +625,12 @@
   <nav class="navbar">
     <div class="navbar-content">
       <img src="Soonpaylogo.png" alt="Soonpay" class="navbar-logo">
+      <button class="help-icon-button" onclick="openInstructionsModal()" aria-label="Instructions">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+          <path d="M12 16V12M12 8H12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
     </div>
   </nav>
 
@@ -973,6 +999,38 @@
         </div>
       </div>
     </div>
+
+    <!-- Instructions Modal -->
+    <div class="document-modal" id="instructionsModal">
+      <div class="document-modal-content">
+        <button class="document-modal-close" onclick="closeInstructionsModal()" aria-label="Close">×</button>
+        <h2 class="document-modal-title">Instructions for Soonpay Exploration Quests</h2>
+        <div class="document-modal-text">
+          <p>Welcome to Soonpay Exploration Quests! Here's how to participate:</p>
+
+          <h3>Getting Started</h3>
+          <p>• Complete the welcome form to begin your journey</p>
+          <p>• Download the Soonpay app for the best experience</p>
+          <p>• Explore different quest topics to learn about remittances</p>
+
+          <h3>How to Complete Quests</h3>
+          <p>• Click the "Explore" button on any topic card</p>
+          <p>• Complete the interactive activities within each quest</p>
+          <p>• Learn about Soonpay's innovative approach to remittances</p>
+
+          <h3>Quest Topics</h3>
+          <p>• Smarter Remittances & Hidden Fees Awareness</p>
+          <p>• Purposeful Savings & Family Budgeting</p>
+          <p>• Health & Protection</p>
+          <p>• Stablecoins & Instant Digital Money Rails</p>
+          <p>• Empowering Families & Community Development</p>
+          <p>• Social Quests</p>
+
+          <h3>Need Help?</h3>
+          <p>If you have questions or need assistance, please contact us at jlewis@skylarknova.xyz</p>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -1000,6 +1058,23 @@
       if (modalId) {
         document.getElementById(modalId).classList.remove('active');
         document.body.style.overflow = 'hidden'; // Keep overflow hidden since welcome modal is still open
+      }
+    }
+
+    // Instructions Modal Functions
+    function openInstructionsModal() {
+      document.getElementById('instructionsModal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeInstructionsModal() {
+      document.getElementById('instructionsModal').classList.remove('active');
+      // Check if welcome modal is open
+      const welcomeModal = document.getElementById('welcomeModal');
+      if (welcomeModal && welcomeModal.style.display !== 'none') {
+        document.body.style.overflow = 'hidden';
+      } else {
+        document.body.style.overflow = 'auto';
       }
     }
 
