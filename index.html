@@ -1224,10 +1224,21 @@
       document.body.style.overflow = 'auto';
     }
 
-    // Toggle quest completion (now opens iframe for Mountain Expedition)
+    // Toggle quest completion - opens specific URL for each topic
     function toggleQuest(topicId, questId) {
-      // Open the patron activation page in iframe
-      openQuest('https://app.skylarknova.xyz/patronActivation/66c9bf7f879b3cae7985666e');
+      // Map topic IDs to their specific URLs
+      const questUrls = {
+        1: 'https://app.skylarknova.xyz/patronActivation/692db6fb0d82b71347cac69f', // Smarter Remittances & Hidden Fees Awareness
+        2: 'https://app.skylarknova.xyz/patronActivation/692dbb6f0d82b71347cac6a2', // Purposeful Savings & Family Budgeting
+        3: 'https://app.skylarknova.xyz/patronActivation/692dbe28ad9a36ece2749ce6', // Health & Protection
+        4: 'https://app.skylarknova.xyz/patronActivation/692dc124ad9a36ece2749ce7', // Stablecoins & Instant Digital Money Rails
+        5: 'https://app.skylarknova.xyz/patronActivation/692dc3ecad9a36ece2749ce8', // Empowering Families & Community Development
+        6: 'https://app.skylarknova.xyz/patronActivation/66c9bf7f879b3cae7985666e'  // Social Quests (default)
+      };
+
+      // Open the patron activation page in iframe with the appropriate URL
+      const url = questUrls[topicId] || questUrls[6]; // Fallback to topic 6 URL if not found
+      openQuest(url);
     }
 
     // Render topics
